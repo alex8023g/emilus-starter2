@@ -37,7 +37,7 @@ export class UserView extends Component {
           </p>
           <p>
             <CalendarOutlined />
-            <span className='ml-3 text-dark'>Born in {data?.phone}</span>
+            <span className='ml-3 text-dark'>zipcode {data?.address.zipcode}</span>
           </p>
         </div>
         <div className='mt-5'>
@@ -52,7 +52,7 @@ export class UserView extends Component {
           </p>
           <p>
             <CompassOutlined />
-            <span className='ml-3 text-dark'>{data?.address.street}</span>
+            <span className='ml-3 text-dark'>{data?.address.city}</span>
           </p>
         </div>
         <div className='mt-5'>
@@ -78,7 +78,7 @@ export class UserView extends Component {
           <p>
             <GlobalOutlined />
             <a href='/#' className='ml-3 text-dark'>
-              {data?.websitesite ? data?.website : '-'}
+              {data?.website ? data?.website : '-'}
             </a>
           </p>
         </div>

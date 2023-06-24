@@ -5,16 +5,22 @@ import dayjs from 'dayjs';
 import UserView from './UserView';
 import AvatarStatus from 'components/shared-components/AvatarStatus';
 import userData from 'assets/data/user-list.data.json';
+import Loading from 'components/shared-components/Loading';
+import { Navigate } from 'react-router-dom';
 
 export class UserList extends Component {
   state = {
-    users: userData,
+    users: [],
+    // users: userData,
     userProfileVisible: false,
     selectedUser: null,
+    isLoading: false,
+    redirect: false,
   };
 
   componentDidMount() {
     // load stuff
+    this.isLoading = true;
     fetch('https://jsonplaceholder.typicode.com/users')
       .then((res) => res.json())
       .then((users) => {
@@ -23,6 +29,7 @@ export class UserList extends Component {
           ...user,
           img: `/img/avatars/thumb-${i + 1}.jpg`,
         }));
+        this.isLoading = false;
         this.setState({
           // loaded: true,
           users: users,
@@ -130,18 +137,38 @@ export class UserList extends Component {
       },
     ];
     return (
-      <Card bodyStyle={{ padding: '0px' }}>
-        <div className='table-responsive'>
-          <Table columns={tableColumns} dataSource={users} rowKey='id' />
-        </div>
-        <UserView
-          data={selectedUser}
-          visible={userProfileVisible}
-          close={() => {
-            this.closeUserProfile();
-          }}
-        />
-      </Card>
+      <>
+        {this.redirect && <Navigate to={`/app/apps/mail`} replace={true} />}
+        <Card bodyStyle={{ padding: '0px' }}>
+          <div className='table-responsive'>
+            {this.isLoading && <Loading />}
+            <Table
+              columns={tableColumns}
+              dataSource={users}
+              rowKey='id'
+              onRow={(el) => {
+                return {
+                  onClick: (e) => {
+                    e.preventDefault();
+                    console.log('click', el.id);
+                    this.setState({
+                      redirect: true,
+                    });
+                    // navigate(`/app/apps/mail/${params.category}/${elm.id}`)
+                  },
+                };
+              }}
+            />
+          </div>
+          <UserView
+            data={selectedUser}
+            visible={userProfileVisible}
+            close={() => {
+              this.closeUserProfile();
+            }}
+          />
+        </Card>
+      </>
     );
   }
 }
