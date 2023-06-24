@@ -27,7 +27,7 @@ const dashBoardNavTree = [
         submenu: [
           {
             key: 'clients-list',
-            path: `${APP_PREFIX_PATH}/main/clients-list`,
+            path: `${APP_PREFIX_PATH}/main/clients/list`,
             title: 'sidenav.main.clients.list',
             icon: '',
             breadcrumb: false,

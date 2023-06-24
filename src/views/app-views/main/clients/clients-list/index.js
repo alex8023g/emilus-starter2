@@ -6,7 +6,9 @@ import UserView from './UserView';
 import AvatarStatus from 'components/shared-components/AvatarStatus';
 import userData from 'assets/data/user-list.data.json';
 import Loading from 'components/shared-components/Loading';
-import { Navigate } from 'react-router-dom';
+// import { Navigate } from 'react-router-dom';
+import { withRouter } from './withRouter';
+import { APP_PREFIX_PATH } from 'configs/AppConfig';
 
 export class UserList extends Component {
   state = {
@@ -138,7 +140,7 @@ export class UserList extends Component {
     ];
     return (
       <>
-        {this.redirect && <Navigate to={`/app/apps/mail`} replace={true} />}
+        {/* {this.redirect && <Navigate to={`/app/apps/mail`} replace={true} />} */}
         <Card bodyStyle={{ padding: '0px' }}>
           <div className='table-responsive'>
             {this.isLoading && <Loading />}
@@ -151,9 +153,10 @@ export class UserList extends Component {
                   onClick: (e) => {
                     e.preventDefault();
                     console.log('click', el.id);
-                    this.setState({
-                      redirect: true,
-                    });
+                    this.props.navigate(`${APP_PREFIX_PATH}/main/clients/${el.id}`);
+                    // this.setState({
+                    //   redirect: true,
+                    // });
                     // navigate(`/app/apps/mail/${params.category}/${elm.id}`)
                   },
                 };
@@ -173,4 +176,4 @@ export class UserList extends Component {
   }
 }
 
-export default UserList;
+export default withRouter(UserList);
