@@ -12,30 +12,34 @@ import { produce } from 'immer';
 
 export function Planner() {
   const [furnitures, setFurnitures] = useState([
-    { id: 1, src: armchair, isSelected: false },
-    { id: 2, src: bed, isSelected: false },
-    { id: 3, src: sofa2, isSelected: false },
+    { type: 'armchair', src: armchair, isSelected: false },
+    { type: 'bed', src: bed, isSelected: false },
+    { type: 'sofa2', src: sofa2, isSelected: false },
     // { id: 4, src: sofa3 },
   ]);
 
   const [furnOnPlan, setFurnOnPlan] = useState([]);
+  const [dragSrart, setDragStart] = useState([]);
+  const [furnSrart, setFurnStart] = useState([]);
+
   return (
     <>
       <div className='test'>Planner</div>
+      <Button>Сохранить</Button>
+      <Button>Импорт</Button>
       <Box display={'flex'} alignItems={'center'}>
         <Paper elevation={5} sx={{ padding: 5, marginRight: 2 }}>
           <ul className='ul'>
-            {furnitures.map(({ id, src, isSelected }) => {
+            {furnitures.map(({ type, src, isSelected }) => {
               const compClass = isSelected ? 'li selected' : 'li';
               return (
                 <li
                   className='li'
-                  key={id}
+                  key={type}
                   onClick={(e) => {
-                    console.log(id);
                     setFurnitures(
                       furnitures.map((item) =>
-                        item.id === id
+                        item.type === type
                           ? { ...item, isSelected: true }
                           : { ...item, isSelected: false }
                       )
@@ -70,7 +74,8 @@ export function Planner() {
         <Paper elevation={5} sx={{ height: 600, width: 800 }}>
           {/* <div> */}
           {furnOnPlan.map((item) => (
-            <img
+            <div
+              // src={item.src}
               key={item.id}
               style={{
                 position: 'absolute',
@@ -78,20 +83,28 @@ export function Planner() {
                 top: `${item.top}px`,
               }}
               draggable={true}
-              src={item.src}
               alt=''
+              onDragStart={(e) => {
+                setDragStart([e.pageX, e.pageY]);
+                setFurnStart([item.left, item.top]);
+                return false;
+              }}
               onDrag={(e) => {
                 console.log(e.pageX, e.pageY);
                 if (e.pageX < 1) return;
+                const moveX = e.pageX - dragSrart[0];
+                const moveY = e.pageY - dragSrart[1];
                 setFurnOnPlan(
                   produce((draft) => {
                     const furn = draft.find((item2) => item2.id === item.id);
-                    furn.left = e.pageX;
-                    furn.top = e.pageY;
+                    furn.left = furnSrart[0] + moveX;
+                    furn.top = furnSrart[1] + moveY;
                   })
                 );
               }}
-            />
+            >
+              <img src={item.src} alt='' />
+            </div>
           ))}
           {/* </div> */}
         </Paper>
