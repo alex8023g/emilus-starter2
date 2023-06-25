@@ -14,11 +14,11 @@ export default function mockServer({ environment = 'test' }) {
       });
     },
     routes() {
-      this.urlPrefix = 'https://emilus-starter2.vercel.app';
-      // this.urlPrefix = ''
+      //   this.urlPrefix = 'https://emilus-starter2.vercel.app';
+      this.urlPrefix = '';
       this.namespace = '';
       this.passthrough((request) => {
-        const isExternal = request.url.startsWith('https');
+        const isExternal = request.url.startsWith('http');
         return isExternal;
       });
       this.passthrough();
