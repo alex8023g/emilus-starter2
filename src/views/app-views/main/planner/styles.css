@@ -1,0 +1,19 @@
+.test {
+  color: red;
+}
+
+.ul {
+  padding: 0;
+}
+
+.li {
+  list-style-type: none;
+}
+
+.li:not(:last-child) {
+  margin-bottom: 20px;
+}
+
+.selected {
+  outline: 2px solid coral;
+}

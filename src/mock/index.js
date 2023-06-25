@@ -14,7 +14,6 @@ export default function mockServer({ environment = 'test' }) {
       });
     },
     routes() {
-      //   this.urlPrefix = 'https://emilus-starter2.vercel.app';
       this.urlPrefix = '';
       this.namespace = '';
       this.passthrough((request) => {
