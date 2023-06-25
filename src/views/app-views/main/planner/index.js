@@ -2,20 +2,19 @@ import React, { useState } from 'react';
 import armchair from './mebelImg/armchair.svg';
 import bed from './mebelImg/bed.svg';
 import sofa2 from './mebelImg/sofa2.svg';
-import sofa3 from './mebelImg/sofa3.svg';
 import './styles.css';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import { nanoid } from '@reduxjs/toolkit';
 import { produce } from 'immer';
+import { saveAs } from 'file-saver';
 
 export function Planner() {
   const [furnitures, setFurnitures] = useState([
     { type: 'armchair', src: armchair, isSelected: false },
     { type: 'bed', src: bed, isSelected: false },
     { type: 'sofa2', src: sofa2, isSelected: false },
-    // { id: 4, src: sofa3 },
   ]);
 
   const [furnOnPlan, setFurnOnPlan] = useState([]);
@@ -25,8 +24,42 @@ export function Planner() {
   return (
     <>
       <div className='test'>Planner</div>
-      <Button>Сохранить</Button>
-      <Button>Импорт</Button>
+      <Button
+        variant='contained'
+        sx={{ marginRight: 3 }}
+        onClick={(e) => {
+          const text = JSON.stringify(furnOnPlan);
+          var blob = new Blob([text], {
+            type: 'text/plain;charset=utf-8',
+          });
+          saveAs(blob, 'hello world.txt');
+        }}
+      >
+        Сохранить
+      </Button>
+
+      <input
+        style={{ display: 'none' }}
+        accept='.txt'
+        // className={classes.input}
+        id='contained-button-file'
+        multiple
+        type='file'
+        onChange={(e) => {
+          console.log(e.target.files[0]);
+          let reader = new FileReader();
+          reader.readAsText(e.target.files[0]);
+          reader.onload = function () {
+            const res = JSON.parse(reader.result);
+            setFurnOnPlan(res);
+          };
+        }}
+      />
+      <label htmlFor='contained-button-file'>
+        <Button variant='contained' color='primary' component='span'>
+          Импорт
+        </Button>
+      </label>
       <Box display={'flex'} alignItems={'center'}>
         <Paper elevation={5} sx={{ padding: 5, marginRight: 2 }}>
           <ul className='ul'>
