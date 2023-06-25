@@ -118,7 +118,8 @@ export class UserList extends Component {
                 type='primary'
                 className='mr-2'
                 icon={<EyeOutlined />}
-                onClick={() => {
+                onClick={(e) => {
+                  e.stopPropagation();
                   this.showUserProfile(elm);
                 }}
                 size='small'
