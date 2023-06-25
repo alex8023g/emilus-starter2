@@ -37,4 +37,9 @@ export const protectedRoutes = [
     path: `${APP_PREFIX_PATH}/main/clients/:id`,
     component: React.lazy(() => import('views/app-views/main/clients/edit-profile')),
   },
+  {
+    key: 'planner',
+    path: `${APP_PREFIX_PATH}/main/planner`,
+    component: React.lazy(() => import('views/app-views/main/planner')),
+  },
 ];
