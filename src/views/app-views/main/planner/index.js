@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import armchair from './mebelImg/armchair.svg';
 import bed from './mebelImg/bed.svg';
 import sofa2 from './mebelImg/sofa2.svg';
@@ -18,8 +18,17 @@ export function Planner() {
   ]);
 
   const [furnOnPlan, setFurnOnPlan] = useState([]);
-  const [dragSrart, setDragStart] = useState([]);
-  const [furnSrart, setFurnStart] = useState([]);
+  const [dragStart, setDragStart] = useState([]);
+  const [furnStart, setFurnStart] = useState([]);
+  const [boundary, setBoundary] = useState({});
+
+  useEffect(() => {
+    const el = document.getElementById('PaperFurnOnPlan');
+    const rect = el.getBoundingClientRect();
+    console.log(rect.top, rect.right, rect.bottom, rect.left);
+    const { top, right, bottom, left } = rect;
+    setBoundary({ top, right, bottom, left });
+  }, []);
 
   return (
     <>
@@ -104,7 +113,7 @@ export function Planner() {
           {' '}
           {'>'}{' '}
         </Button>
-        <Paper elevation={5} sx={{ height: 600, width: 800 }}>
+        <Paper elevation={5} sx={{ height: 600, width: 800 }} id='PaperFurnOnPlan'>
           {/* <div> */}
           {furnOnPlan.map((item) => (
             <div
@@ -125,13 +134,17 @@ export function Planner() {
               onDrag={(e) => {
                 console.log(e.pageX, e.pageY);
                 if (e.pageX < 1) return;
-                const moveX = e.pageX - dragSrart[0];
-                const moveY = e.pageY - dragSrart[1];
+                const moveX = e.pageX - dragStart[0];
+                const moveY = e.pageY - dragStart[1];
                 setFurnOnPlan(
                   produce((draft) => {
                     const furn = draft.find((item2) => item2.id === item.id);
-                    furn.left = furnSrart[0] + moveX;
-                    furn.top = furnSrart[1] + moveY;
+                    if (boundary.left > furnStart[0] + moveX + 60) return;
+                    if (boundary.left + 400 < furnStart[0] + moveX) return;
+                    if (boundary.top > furnStart[1] + moveY + 60) return;
+                    if (boundary.top + 400 < furnStart[1] + moveY) return;
+                    furn.left = furnStart[0] + moveX;
+                    furn.top = furnStart[1] + moveY;
                   })
                 );
               }}
